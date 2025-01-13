@@ -8,7 +8,7 @@ from file_processing import process_uploaded_file
 from data_processing import scrape_data, process_scraped_data
 from response_handling import ResponseHandler
 from embed_handling import ModelManager
-from voice_and_audio import VoiceHandler
+from voice_handler import VoiceHandler
 
 class ChatbotApp:
     def __init__(self):
@@ -127,18 +127,7 @@ class ChatbotApp:
         # Voice input option
         if st.button("Speak to the Bot"):
             user_input = self.voice_handler.get_voice_input()
-            if user_input:
-                bot_response = self.response_handler.get_response(
-                    user_input, 
-                    bot_name, 
-                    st.session_state.get("document_search")
-                )
-                st.markdown(f"**You:** {user_input}")
-                st.markdown(f"**{bot_name}:** {bot_response}")
-                
-                # Optional speech playback
-                if st.button("Play Response"):
-                    self.voice_handler.text_to_speech(bot_response)
+            self.voice_handler.handle_voice_interaction(user_input, bot_name, self.response_handler)
 
         # Text input
         user_input = st.text_area("Enter your message:", height=100)
